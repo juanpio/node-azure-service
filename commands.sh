@@ -1,8 +1,8 @@
 #set environment variables
 export SQL_PASSWORD=@Sqledge123$2025
 export ACCEPT_EULA=Y
-export CONFIG_PATH_SB='../node-azure-services/service-bus/config/Config.json'
-export CONFIG_PATH_EH='../node-azure-services/event-hub/config/Config.json'
+export CONFIG_PATH_SB='../node-azure-services/config/service-bus/Config.json'
+export CONFIG_PATH_EH='../node-azure-services/config/event-hub/Config.json'
 export COMPOSE_DOWN=n
 
 export SERVICEBUS_CONNECTION_STRING="Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;"
