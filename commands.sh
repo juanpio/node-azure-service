@@ -15,5 +15,5 @@ env
 #docker compose -f "azure-service-bus-emulator-installer/Sample-Code-Snippets/docker-compose-js.yml" down --volumes --remove-orphans
 
 #Run docker compose file detached mode
-docker compose -p iep-claim-ingestion -f "node-azure-services/docker-compose-js.yml" up -d --build
+docker compose -p event-services-compouse -f "node-azure-services/docker-compose-js.yml" up -d --build
 
