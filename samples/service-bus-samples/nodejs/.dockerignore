@@ -1,0 +1,16 @@
+#Node modules and npm debug logs
+node_modules
+npm-debug.log
+#Visual Studio Code files
+.vscode
+#User-specific files
+*.user
+*.env.*
+#Resharper files
+_ReSharper.*
+#GitHub files
+.github
+#Dockerfile
+Dockerfile
+#Readme
+README.md

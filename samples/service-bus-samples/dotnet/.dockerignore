@@ -1,0 +1,20 @@
+#Net bin and obj folders
+**/bin
+**/obj
+#Visual Studio files
+.vs
+.vscode
+#Nuget packages
+packages
+#User-specific files
+*.user
+*.suo
+*.sln.docstates
+#Resharper files
+_ReSharper.*
+#GitHub files
+.github
+#Dockerfile
+Dockerfile
+#Readme
+README.md
