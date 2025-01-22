@@ -13,6 +13,9 @@ env
 #Run docker compose down
 #docker compose -f "azure-service-bus-emulator-installer/Sample-Code-Snippets/docker-compose-js.yml" down --volumes --remove-orphans
 
+#Run docker compose for azure event hub emulator
+docker compose -p eventhub-emulator -f "node-azure-services/docker-compose-eventhub.yml" up -d --build
+
 #Run docker compose file detached mode
 docker compose -p iep-claim-ingestion -f "node-azure-services/docker-compose-js.yml" up -d --build
 
