@@ -1,15 +1,16 @@
 name: microsoft-azure-servicebus-emulator
 services:
-  iep-claim-ingestion:
-    container_name: "iep-claim-ingestion"
-    build:
-      context: ./test-service-bus
-      dockerfile: Dockerfile
-    networks:
-      - sb-emulator
-    depends_on:
-      - emulator
-  emulator:
+  # node-process:
+  #   container_name: "node-process"
+  #   build:
+  #     context: ./node-process
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - sb-emulator
+  #   depends_on:
+  #     - servicebus-emulator
+  #     - eventhubs-emulator
+  servicebus-emulator:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
     pull_policy: always
@@ -26,7 +27,7 @@ services:
     networks:
       sb-emulator:
         aliases:
-          - "sb-emulator"
+          - "servicebus-emulator"
   sqledge:
     container_name: "sqledge"
     image: "mcr.microsoft.com/azure-sql-edge:latest"
@@ -37,6 +38,37 @@ services:
     environment:
       ACCEPT_EULA: ${ACCEPT_EULA}
       MSSQL_SA_PASSWORD: "${SQL_PASSWORD}" # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16 
+  eventhubs-emulator:
+    container_name: "eventhubs-emulator"
+    image: "mcr.microsoft.com/azure-messaging/eventhubs-emulator:latest"
+    pull_policy: always
+    volumes:
+      - "${CONFIG_PATH_EH}:/Eventhubs_Emulator/ConfigFiles/Config.json"
+    ports:
+      - "5673:5673"
+      - "9092:9092"
+    environment:
+      BLOB_SERVER: azurite
+      METADATA_SERVER: azurite
+      ACCEPT_EULA: ${ACCEPT_EULA}
+    depends_on:
+      - azurite
+    networks:
+      sb-emulator:
+        aliases:
+          - "eventhubs-emulator"
+  azurite:
+    container_name: "azurite"
+    image: "mcr.microsoft.com/azure-storage/azurite:latest"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    networks:
+      sb-emulator:
+        aliases:
+          - "azurite"
+
 networks:
   sb-emulator:
 
