@@ -1,5 +1,32 @@
 name: microsoft-azure-servicebus-emulator
 services:
+  netcore-app-servicebus:
+    container_name: "netcore-app-servicebus"
+    build:
+      context: ./samples/service-bus-samples/dotnet
+      dockerfile: Dockerfile
+    networks:
+      - sb-emulator
+    depends_on:
+      - servicebus-emulator
+  node-app-servicebus:
+    container_name: "node-app-servicebus"
+    build:
+      context: ./samples/service-bus-samples/nodejs
+      dockerfile: Dockerfile
+    networks:
+      - sb-emulator
+    depends_on:
+      - servicebus-emulator
+  netcore-app-eventhubs:
+    container_name: "netcore-app-eventhubs"
+    build:
+      context: ./samples/event-hubs-samples/dotnet
+      dockerfile: Dockerfile
+    networks:
+      - sb-emulator
+    depends_on:
+      - eventhubs-emulator
   # node-process:
   #   container_name: "node-process"
   #   build:
