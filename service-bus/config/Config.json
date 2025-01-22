@@ -2,10 +2,10 @@
   "UserConfig": {
     "Namespaces": [
       {
-        "Name": "iep-claim-ingestion",
+        "Name": "sbemulatorns",
         "Queues": [
           {
-            "Name": "claim-activity",
+            "Name": "queue.1",
             "Properties": {
               "DeadLetteringOnMessageExpiration": false,
               "DefaultMessageTimeToLive": "PT1H",
@@ -22,7 +22,7 @@
 
         "Topics": [
           {
-            "Name": "activity-received",
+            "Name": "topic.1",
             "Properties": {
               "DefaultMessageTimeToLive": "PT1H",
               "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -30,7 +30,7 @@
             },
             "Subscriptions": [
               {
-                "Name": "activity-ingestion",
+                "Name": "subscription.1",
                 "Properties": {
                   "DeadLetteringOnMessageExpiration": false,
                   "DefaultMessageTimeToLive": "PT1H",
@@ -59,6 +59,43 @@
                     }
                   }
                 ]
+              },
+              {
+                "Name": "subscription.2",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": false,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 3,
+                  "ForwardDeadLetteredMessagesTo": "",
+                  "ForwardTo": "",
+                  "RequiresSession": false
+                },
+                "Rules": [
+                  {
+                    "Name": "user-prop-filter-1",
+                    "Properties": {
+                      "FilterType": "Correlation",
+                      "CorrelationFilter": {
+                        "Properties": {
+                          "prop1": "value1"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "Name": "subscription.3",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": false,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 3,
+                  "ForwardDeadLetteredMessagesTo": "",
+                  "ForwardTo": "",
+                  "RequiresSession": false
+                }
               }
             ]
           }

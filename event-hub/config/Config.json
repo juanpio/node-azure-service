@@ -1,24 +1,24 @@
 {
   "UserConfig": {
-    "NamespaceConfig": [
+      "NamespaceConfig": [
       {
-        "Type": "EventHub",
-        "Name": "ns-claim-ingestion",
-        "Entities": [
+          "Type": "EventHub",
+          "Name": "emulatorNs1",
+          "Entities": [
           {
-            "Name": "eh-claim-ingestion",
-            "PartitionCount": 2,
-            "ConsumerGroups": [
+              "Name": "eh1",
+              "PartitionCount": 2,
+              "ConsumerGroups": [
               {
-                "Name": "cg-claim-ingestion"
+                  "Name": "cg1"
               }
-            ]
+              ]
           }
-        ]
+          ]
       }
-    ],
-    "LoggingConfig": {
-      "Type": "File"
-    }
+      ], 
+      "LoggingConfig": {
+          "Type": "File"
+      }
   }
 }
