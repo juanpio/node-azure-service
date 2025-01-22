@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+  "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+                                 /* Skip type checking all .d.ts files. */
+  },
+  "include": [
+    "service-buss/*.ts"
+  ]
+  ,
+  "exclude": [
+    "node_modules"
+  ]
+}
