@@ -14,7 +14,7 @@ FROM base AS dependencies
 COPY package*.json ./
 #COPY pnpm-lock.yaml ./
 COPY ./libs ./libs
-COPY .npmrc ./
+#COPY .npmrc ./
 
 RUN pnpm add file:libs\\iep-libs-common-0.0.1.tgz;  
 #RUN pnpm install 
