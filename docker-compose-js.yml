@@ -1,42 +1,44 @@
 name: microsoft-azure-servicebus-emulator
 services:
-  netcore-app-servicebus:
-    container_name: "netcore-app-servicebus"
-    build:
-      context: ./samples/service-bus-samples/dotnet
-      dockerfile: Dockerfile
-    networks:
-      - sb-emulator
-    depends_on:
-      - servicebus-emulator
-  node-app-servicebus:
-    container_name: "node-app-servicebus"
-    build:
-      context: ./samples/service-bus-samples/nodejs
-      dockerfile: Dockerfile
-    networks:
-      - sb-emulator
-    depends_on:
-      - servicebus-emulator
-  netcore-app-eventhubs:
-    container_name: "netcore-app-eventhubs"
-    build:
-      context: ./samples/event-hubs-samples/dotnet
-      dockerfile: Dockerfile
-    networks:
-      - sb-emulator
-    depends_on:
-      - eventhubs-emulator
-  # node-process:
-  #   container_name: "node-process"
+  # netcore-app-servicebus:
+  #   container_name: "netcore-app-servicebus"
   #   build:
-  #     context: ./node-process
+  #     context: ./samples/service-bus-samples/dotnet
   #     dockerfile: Dockerfile
   #   networks:
   #     - sb-emulator
   #   depends_on:
   #     - servicebus-emulator
-  #     - eventhubs-emulator
+  # node-app-servicebus:
+  #   container_name: "node-app-servicebus"
+  #   build:
+  #     context: ./samples/service-bus-samples/nodejs
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - sb-emulator
+  #   depends_on:
+  #     - servicebus-emulator
+  # netcore-app-eventhubs:
+    # container_name: "netcore-app-eventhubs"
+    # build:
+    #   context: ./samples/event-hubs-samples/dotnet
+    #   dockerfile: Dockerfile
+    # networks:
+    #   - sb-emulator
+    # depends_on:
+    #   - eventhubs-emulator
+  node-process:
+    container_name: "node-process"
+    build:
+      context: ./node-process
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - sb-emulator
+    depends_on:
+      - servicebus-emulator
+      - eventhubs-emulator
   servicebus-emulator:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
