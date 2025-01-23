@@ -5,7 +5,7 @@ npm-debug.log
 .vscode
 #User-specific files
 *.user
-*.env.*
+#*.env.*
 #Resharper files
 _ReSharper.*
 #GitHub files

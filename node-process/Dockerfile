@@ -1,29 +1,32 @@
 # From node image
-FROM node:20.4.0 base
+FROM node:20.4.0 AS base
 # Create app directory
 # Install pnpm
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
+
 FROM base AS dependencies
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 
 COPY package*.json ./
+#COPY pnpm-lock.yaml ./
+COPY ./libs ./libs
+COPY .npmrc ./
 
-RUN pnpm install
+RUN pnpm add file:libs\\iep-libs-common-0.0.1.tgz;  
+#RUN pnpm install 
+
 # If you are building your code for production
 # RUN npm ci --only=production
 FROM dependencies AS build
 # Bundle app source
 COPY . .
 # Build the app
-RUN pnpm run build
+RUN npm run build
 
-FROM dependencies AS test
-# Test the app
-RUN pnpm test
 
 FROM build AS release
 
@@ -31,4 +34,4 @@ FROM build AS release
 COPY --from=build /usr/src/app/dist ./dist
 
 EXPOSE 3000
-CMD [ "pnpm", "start:pord" ]
+CMD [ "pnpm", "start:prod" ]

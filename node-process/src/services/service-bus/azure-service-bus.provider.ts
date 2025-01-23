@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { IServiceBus } from 'src/common/interfaces/service-bus.interface';
-import { ServiceBusClient, ServiceBusSender } from '@azure/service-bus';
+import { ServiceBusClient, ServiceBusMessage, ServiceBusSender } from '@azure/service-bus';
 
 @Injectable()
 export class AzureServiceBusProvider implements IServiceBus, OnModuleDestroy {
@@ -18,11 +18,16 @@ export class AzureServiceBusProvider implements IServiceBus, OnModuleDestroy {
     }
   }
 
-  sendMessage(message: any): Promise<void> {
+  sendMessage(message: ServiceBusMessage): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.sender.sendMessages(message);
-        resolve(message);
+        const azureMessage = await this.sender.createMessageBatch();
+        if (!azureMessage.tryAddMessage(message)) {
+          throw new Error('Message too big to fit in a batch');
+        }
+        await this.sender.sendMessages(azureMessage);
+        console.debug('Message sent: ', azureMessage);
+        resolve();
       } catch (e) {
         console.log(e);
         reject(e);

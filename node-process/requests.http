@@ -1,0 +1,41 @@
+# Call the api service auth endpoint
+###
+POST http://localhost:3000/
+Content-Type: application/json
+
+{
+    "memberId": "Member Id",
+    "partnerId": "Apple Health Kit",
+    "activityType": "walking",
+    "activityDescription": "simple walking activity",
+    "activityCode": "STEPS",
+    "memberActivity": 1000,
+    "activityDate": "1/16/2025",
+    "attestKind": "3rd-party",
+    "signature": "test"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "memberId": 1
+}
+
+###
+POST http://localhost:3000/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzM3NjA1NzY1LCJleHAiOjE3Mzc2MDkzNjV9.6WsqvgauuY6Nj6x7WUDzvhZ2i4PJnlYwu2-KYJTilUk
+Content-Type: application/json
+
+{
+    "memberId": "Member Id",
+    "partnerId": "Apple Health Kit",
+    "activityType": "walking",
+    "activityDescription": "simple walking activity",
+    "activityCode": "STEPS",
+    "memberActivity": 1000,
+    "activityDate": "1/16/2025",
+    "attestKind": "3rd-party",
+    "signature": "test"
+}

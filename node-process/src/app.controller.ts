@@ -15,6 +15,10 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createActivityDto: CreateActivityDto): Promise<void> {
-    return this.appService.postOnServiceBus(createActivityDto);
+    const message = {
+      body: JSON.stringify(createActivityDto),
+    };
+
+    return this.appService.postOnServiceBus(message);
   }
 }
