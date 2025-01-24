@@ -25,7 +25,7 @@ FROM dependencies AS build
 # Bundle app source
 COPY . .
 # Build the app
-RUN npm run build
+RUN pnpm build
 
 
 FROM build AS release
