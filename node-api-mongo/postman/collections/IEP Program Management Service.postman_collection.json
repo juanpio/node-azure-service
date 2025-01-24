@@ -1,0 +1,682 @@
+{
+	"info": {
+		"_postman_id": "8bfc76ba-8757-43cf-bd63-c04e25a305c0",
+		"name": "IEP Program Management Service",
+		"description": "TODO:\n\n1. Update/Delete Endpoints on all APIs\n    \n2. Partner APIs\n    \n3. Postman smoke tests for QA testing output",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38841116"
+	},
+	"item": [
+		{
+			"name": "Programs",
+			"item": [
+				{
+					"name": "BusinessGoals",
+					"item": [
+						{
+							"name": "Create BusinessGoal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"",
+											"// code 202",
+											"pm.test(\"Response is 201 Created\", function () {",
+											"    pm.expect(pm.response.code).to.equal(201);",
+											"});",
+											"",
+											"// set businessGoalId environment variable",
+											"pm.environment.set(\"businessGoalId\", response.businessGoalId);",
+											"pm.test(\"businessGoalId is set\", function () {",
+											"    const businessGoalId = pm.environment.get(\"businessGoalId\");",
+											"    pm.expect(response.businessGoalId).to.eql(businessGoalId);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"description": "client id from jwt? otherwise pass in via body",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"start\": \"2025-01-01\",\n  \"end\": \"2025-12-31\",\n  \"target\": {\n    \"value\": 45,\n    \"unitOfMeasure\": \"Percentage\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/programs/{{programId}}/businessgoals?businessGoalTemplateId={{businessGoalTemplateId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"programs",
+										"{{programId}}",
+										"businessgoals"
+									],
+									"query": [
+										{
+											"key": "businessGoalTemplateId",
+											"value": "{{businessGoalTemplateId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get BusinessGoal",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"description": "has company id in JWT",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/programs/{{programId}}/businessgoals/{{businessGoalId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"programs",
+										"{{programId}}",
+										"businessgoals",
+										"{{businessGoalId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All BusinessGoals of Program",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/programs/{{programId}}/businessgoals",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"programs",
+										"{{programId}}",
+										"businessgoals"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Program",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"// code 202",
+									"pm.test(\"Response is 201 Created\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// set programId environment variable",
+									"pm.environment.set(\"programId\", response.programId);",
+									"pm.test(\"programId is set\", function () {",
+									"    const programId = pm.environment.get(\"programId\");",
+									"    pm.expect(response.programId).to.eql(programId);",
+									"});",
+									"",
+									"// set clientId environment variable",
+									"pm.environment.set(\"clientId\", response.clientId);",
+									"pm.test(\"clientId is set\", function () {",
+									"    const clientId = pm.environment.get(\"clientId\");",
+									"    pm.expect(response.clientId).to.eql(clientId);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "client id from jwt? otherwise pass in via body",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Preventative Care Program\",\n  \"desc\": \"Program to improve member's usage of preventative care\",\n  \"start\": \"2025-01-01\",\n  \"end\": \"2025-12-31\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/programs",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"programs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Program",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "has company id in JWT",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/programs/{{programId}}",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"programs",
+								"{{programId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Programs of Client",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "has company id in JWT",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/programs/client/{{clientId}}",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"programs",
+								"client",
+								"{{clientId}}"
+							],
+							"query": [
+								{
+									"key": "activeOnly",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plans",
+			"item": [
+				{
+					"name": "PlanGoals",
+					"item": [
+						{
+							"name": "Create PlanGoal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"",
+											"// code 202",
+											"pm.test(\"Response is 201 Created\", function () {",
+											"    pm.expect(pm.response.code).to.equal(201);",
+											"});",
+											"",
+											"// set planGoalId environment variable",
+											"pm.environment.set(\"planGoalId\", response.planGoalId);",
+											"pm.test(\"planGoalId is set\", function () {",
+											"    const planGoalId = pm.environment.get(\"planGoalId\");",
+											"    pm.expect(response.planGoalId).to.eql(planGoalId);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"start\": \"2025-01-01\",\n  \"end\": \"2025-12-31\",\n  \"incentive\": {\n    \"amount\": 120,\n    \"type\": \"Cash\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/plans/{{planId}}/goals?planGoalTemplateId={{planGoalTemplateId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"plans",
+										"{{planId}}",
+										"goals"
+									],
+									"query": [
+										{
+											"key": "planGoalTemplateId",
+											"value": "{{planGoalTemplateId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get PlanGoal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/plans/{{planId}}/goals/{{planGoalId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"plans",
+										"{{planId}}",
+										"goals",
+										"{{planGoalId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All PlanGoals of Plan",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/plans/{{planId}}/goals",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"plans",
+										"{{planId}}",
+										"goals"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"// code 202",
+									"pm.test(\"Response is 201 Created\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// set planId environment variable",
+									"pm.environment.set(\"planId\", response.planId);",
+									"pm.test(\"planId is set\", function () {",
+									"    const planId = pm.environment.get(\"planId\");",
+									"    pm.expect(response.planId).to.eql(planId);",
+									"});",
+									"",
+									"// set clientId environment variable",
+									"pm.environment.set(\"clientId\", response.clientId);",
+									"pm.test(\"clientId is set\", function () {",
+									"    const clientId = pm.environment.get(\"clientId\");",
+									"    pm.expect(response.clientId).to.eql(clientId);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Preventative Care 2025\",\n  \"desc\": \"Incentivize preventative care activities for 2025\",\n  \"start\": \"2025-01-01\",\n  \"end\": \"2025-12-31\",\n  \"budget\": 650000,\n  \"maxMemberPayout\": 200\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/plans?programId={{programId}}",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"plans"
+							],
+							"query": [
+								{
+									"key": "programId",
+									"value": "{{programId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/plans/{{planId}}",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"plans",
+								"{{planId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Plans of Program",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{iep-program-mgmt-svc}}/plans?programId={{programId}}",
+							"host": [
+								"{{iep-program-mgmt-svc}}"
+							],
+							"path": [
+								"plans"
+							],
+							"query": [
+								{
+									"key": "programId",
+									"value": "{{programId}}"
+								},
+								{
+									"key": "activeOnly",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Templates",
+			"item": [
+				{
+					"name": "BusinessGoals",
+					"item": [
+						{
+							"name": "Create Template",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"businessGoalTemplateId\": \"prediabetes-completion\",\n  \"type\": \"Completion\",\n  \"category\": \"Preventative Care\",\n  \"name\": \"Prediabetes Screening Completion\",\n  \"desc\": \"Track member completion of Prediabetes Screening goal\",\n  \"kpiId\": \"PrediabetesCompletion\",\n  \"availablePlanGoalTemplateIds\": [\n    \"prediabetes-screening\"\n  ],\n  \"availablePartnerIds\": [\"HQYClaims\"],\n  \"aiDescription\": \"This BusinessGoalTemplate is designed to incentivize members to get a prediabetes screening. Blah blah blah\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/businessgoals",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"businessgoals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Template",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/businessgoals/{{businessGoalTemplateId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"businessgoals",
+										"{{businessGoalTemplateId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Templates",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/businessgoals",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"businessgoals"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PlanGoals",
+					"item": [
+						{
+							"name": "Create Template",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"planGoalTemplateId\": \"prediabetes-screening\",\n  \"name\": \"Prediabetes Screening\",\n  \"desc\": \"This goal aims to promote early detection and prevention of diabetes by encouraging members to undergo regular screenings. By completing this goal, members can take proactive steps towards managing their health and reducing the risk of developing diabetes.\",\n  \"category\": \"Preventative\",\n  \"activityType\": \"Prediabetes Screening\",\n  \"rule\": \"{\\\"cpt-code\\\": \\\"12345\\\"}\",\n  \"ruleTarget\": 1,\n  \"eligibilityRule\": \"{\\\"age\\\": \\\">30\\\",\\\"pbf\\\":\\\">30\\\"}\",\n  \"businessGoalCategory\": \"Preventative Care\",\n  \"kpiIds\": [\"PrediabetesCompletion\"],\n  \"partnerIds\": [\"HQYClaims\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/plangoals",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"plangoals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Template",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/plangoals/{{planGoalTemplateId}}",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"plangoals",
+										"{{planGoalTemplateId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Templates",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{iep-program-mgmt-svc}}/templates/plangoals?aiRecommendation=true",
+									"host": [
+										"{{iep-program-mgmt-svc}}"
+									],
+									"path": [
+										"templates",
+										"plangoals"
+									],
+									"query": [
+										{
+											"key": "aiRecommendation",
+											"value": "true",
+											"description": "if true, ai recommendation flow will be triggered"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Static Data",
+			"item": [
+				{
+					"name": "IncentiveType",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"description": "APIs to relay static data to the UI\n\nCan UI store static data on their side or is it better to hit backend for it?"
+		},
+		{
+			"name": "Partners",
+			"item": []
+		}
+	]
+}

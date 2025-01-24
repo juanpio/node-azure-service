@@ -1,0 +1,17 @@
+###
+POST http://localhost:3000/plans?programId=programId
+Content-Type: application/json
+
+{
+  "planId": "planId",
+  "name": "plan name v5",
+  "desc": "plan description",
+  "start": "2021-01-01",
+  "end": "2021-12-31",
+  "budget": 1000000,
+  "maxMemberPayout": 1000
+}
+###
+GET http://localhost:3000/plans?programId=programId&activeOnly
+###
+GET http://localhost:3000/plans/planId

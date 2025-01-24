@@ -1,0 +1,35 @@
+# Call the api service auth endpoint
+###
+POST http://localhost:3001/programs/
+Content-Type: application/json
+
+{
+  "programId": "asdsadA2343",
+  "name": "Preventative Care Program",
+  "desc": "Program to improve member's usage of preventative care",
+  "start": "2025-01-01",
+  "end": "2025-12-31"
+}
+###
+GET http://localhost:3001/programs/asdsadA2343
+Content-Type: application/json
+
+GET http://localhost:3001/programs/client/clientId
+
+###
+POST http://localhost:3001/plans?programId=asdsadA2343
+Content-Type: application/json
+
+{
+  "planId": "planId",
+  "name": "plan name v5",
+  "desc": "plan description",
+  "start": "2021-01-01",
+  "end": "2021-12-31",
+  "budget": 1000000,
+  "maxMemberPayout": 1000
+}
+###
+GET http://localhost:3001/plans?programId=asdsadA2343&activeOnly
+###
+GET http://localhost:3001/plans/planId

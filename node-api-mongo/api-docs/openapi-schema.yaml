@@ -1,0 +1,1417 @@
+openapi: 3.0.1
+info:
+  title:  IEP Program Management
+  description:  IEP Program Management Service
+  version: 1.0.0
+  contact:
+      name: HealthEquity Developer Portal
+      url: https://developer.healthequity.com
+servers:
+  - url: https://api.sandbox.healthequity.com/iep/program-management/v1
+    description: Development Sandbox Testing Environment
+  - url: https://api.integration.testing.healthequity.com/iep/program-management/v1
+    description: Integration Testing Environment
+  - url: https://api.healthequity.com/iep/program-management/v1
+    description: Production Environment
+x-domain: program-management
+x-sub-domain: program
+tags:
+  - name: Programs
+  - name: Business Goals
+  - name: Plans
+  - name: Plan Goals
+  - name: Templates
+paths:
+  # Program: Create
+  /programs:
+    post:
+      summary: Create Program
+      description:  Creates a new Program.
+      operationId: createProgram
+      tags:
+        - Programs
+      requestBody:
+        $ref: '#/components/requestBodies/createProgramRequest'
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:program']
+  # Program: Get
+  /programs/{programId}:
+    get:
+      summary: Get Program by Id
+      description: Get Program by Id
+      operationId: getProgram
+      tags:
+        - Programs
+      parameters:
+        - name: programId
+          in: path
+          description: Id of Program
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getProgramResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:program']
+  # Program: Get All
+  /programs/client/{clientId}:
+    get:
+      summary: Get All Programs of Client
+      description: Get all Programs for a Client.
+      operationId: getAllProgramsOfClient
+      tags:
+        - Programs
+      parameters:
+        - name: clientId
+          in: path
+          description: Id of Client
+          required: true
+          schema:
+            type: string
+        - name: activeOnly
+          in: query
+          description: Optionally, Get only get active Programs
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllProgramsOfClientResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:program']
+  
+  # BusinessGoal: Create & Get All
+  /programs/{programId}/businessgoals:
+    post:
+      summary: Create BusinessGoal from Template
+      description: Create BusinessGoal within a Program from a template
+      operationId: createBusinessGoal
+      tags:
+        - Business Goals
+      requestBody:
+        $ref: '#/components/requestBodies/createBusinessGoalRequest'
+      parameters:
+        - name: programId
+          in: path
+          description: Id of Program to which BusinessGoal belongs
+          required: true
+          schema:
+            type: string
+        - name: businessGoalTemplateId
+          in: query
+          description: Id of BusinessGoalTemplate which BusinessGoal is built from
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:businessGoal']
+    get:
+      summary: Get All BusinessGoals of Program
+      description: Get all BusinessGoals for a Program.
+      operationId: getAllBusinessGoalsOfProgram
+      tags:
+        - Business Goals
+      parameters:
+        - name: programId
+          in: path
+          description: Id of Program
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllBusinessGoalsOfProgramResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:businessGoal']
+  # BusinessGoal: Get
+  /programs/{programId}/businessgoals/{businessGoalId}:
+    get:
+      summary: Get BusinessGoal by Id
+      description: Get BusinessGoal by Id
+      operationId: getBusinessGoalById
+      tags:
+        - Business Goals
+      parameters:
+        - name: programId
+          in: path
+          description: Id of Program
+          required: true
+          schema:
+            type: string
+        - name: businessGoalId
+          in: path
+          description: Id of BusinessGoal
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getBusinessGoalResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:businessGoal']
+
+  # Plan: Create & Get All
+  /plans:
+    post:
+      summary: Create Plan
+      description:  Creates a new Plan in a Program.
+      operationId: createPlan
+      tags:
+        - Plans
+      requestBody:
+        $ref: '#/components/requestBodies/createPlanRequest'
+      parameters:
+        - name: programId
+          in: query
+          description: Id of Program to which Plan belongs
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:plan']
+    get:
+      summary: Get All Plans of Program
+      description: Get all Plans for a Program.
+      operationId: getAllPlansOfProgram
+      tags:
+        - Plans
+      parameters:
+        - name: programId
+          in: query
+          description: Id of Program
+          required: true
+          schema:
+            type: string
+        - name: activeOnly
+          in: query
+          description: Optionally, only get active Plans
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllPlansOfProgramResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:plan']
+  # Plan: Get
+  /plans/{planId}:
+    get:
+      summary: Get Plan by Id
+      description:  Get Plan by Id
+      operationId: getPlanById
+      tags:
+        - Plans
+      parameters:
+        - name: planId
+          in: path
+          description: Id of Plan
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getPlanResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:plan']
+
+  # PlanGoal: Create & Get All
+  /plans/{planId}/goals:
+    post:
+      summary: Create PlanGoal from Template
+      description:  Create a new PlanGoal from Template
+      operationId: createPlanGoal
+      tags:
+        - Plan Goals
+      parameters:
+        - name: planId
+          in: path
+          description: Id of Plan to which PlanGoal belongs
+          required: true
+          schema:
+            type: string
+        - name: planGoalTemplateId
+          in: query
+          description: Id of PlanGoalTemplate which PlanGoal is built from
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/createPlanGoalRequest'
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:planGoal']
+    get:
+      summary: Get All PlanGoals of Plan
+      description: Get All PlanGoals of Plan
+      operationId: getAllPlanGoalsOfPlan
+      tags:
+        - Plan Goals
+      parameters:
+        - name: planId
+          in: path
+          description: Id of Plan
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllPlanGoalsOfPlanResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:planGoal']
+  # PlanGoal: Get
+  /plans/{planId}/goals/{planGoalId}:
+    get:
+      summary: Get PlanGoal by Id
+      description: Get PlanGoal by Id
+      operationId: getPlanGoalById
+      tags:
+        - Plan Goals
+      parameters:
+        - name: planId
+          in: path
+          description: Id of Plan
+          required: true
+          schema:
+            type: string
+        - name: planGoalId
+          in: path
+          description: Id of PlanGoal
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getPlanGoalResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:planGoal']
+
+  # BusinessGoalTemplate: Create & Get All
+  /templates/businessgoals:
+    post:
+      summary: Create BusinessGoalTemplate
+      description:  Creates a new BusinessGoalTemplate.
+      operationId: createBusinessGoalTemplate
+      tags:
+        - Templates
+      requestBody:
+        $ref: '#/components/requestBodies/createBusinessGoalTemplateRequest'
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:businessGoalTemplate']
+    get:
+      summary: Get All BusinessGoalTemplates
+      description: Get All Business Goal Templates
+      operationId: getAllBusinessGoalTemplates
+      tags:
+        - Templates
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllBusinessGoalTemplatesResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:businessGoalTemplate']
+  # BusinessGoalTemplate: Get
+  /templates/businessgoals/{businessGoalTemplateId}:
+    get:
+      summary: Get BusinessGoalTemplate by Id
+      description: Get Business Goal Template by Id
+      operationId: getBusinessGoalTemplateById
+      tags:
+        - Templates
+      parameters:
+        - name: businessGoalTemplateId
+          in: path
+          description: Id of BusinessGoalTemplate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getBusinessGoalTemplateResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:businessGoalTemplate']
+
+  # PlanGoalTemplate: Create & Get All
+  /templates/plangoals:
+    post:
+      summary: Create PlanGoalTemplate
+      description:  Creates a new PlanGoalTemplate.
+      operationId: createPlanGoalTemplate
+      tags:
+        - Templates
+      requestBody:
+        $ref: '#/components/requestBodies/createPlanGoalTemplateRequest'
+      responses:
+        '201':
+          description: Created
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['write:planGoalTemplate']
+    get:
+      summary: Get All PlanGoalTemplates
+      description: Get All Plan Goal Templates
+      operationId: getAllPlanGoalTemplates
+      tags:
+        - Templates
+      parameters:
+        - name: aiRecommendation
+          in: query
+          description: Optionally, return PlanGoalTemplates sorted by AI recommendation
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/getAllPlanGoalTemplatesResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:planGoalTemplate']
+  # PlanGoalTemplate: Get
+  /templates/plangoals/{planGoalTemplateId}:
+    get:
+      summary: Get PlanGoalTemplates by Id
+      description: Get a Plan Goal Template by Id
+      operationId: getPlanGoalTemplateById
+      tags:
+        - Templates
+      parameters:
+        - name: planGoalTemplateId
+          in: path
+          description: Id of PlanGoalTemplate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/getPlanGoalTemplateResponse'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+      security:
+        - OAuth2: ['read:planGoalTemplate']
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/c5d0ad88-8f93-43b8-9b7c-c8a3bb8e410a/oauth2/v2.0/token
+          scopes:
+            'read:program': Grants events read access
+            'write:program': Grants events write access
+            'read:businessGoal': Grants events read access
+            'write:businessGoal': Grants events write access
+            'read:plan': Grants events read access
+            'write:plan': Grants events write access
+            'read:planGoal': Grants events read access
+            'write:planGoal': Grants events write access
+            'read:businessGoalTemplate': Grants events read access
+            'write:businessGoalTemplate': Grants events write access
+            'read:planGoalTemplate': Grants events read access
+            'write:planGoalTemplate': Grants events write access
+  requestBodies:
+    createProgramRequest:
+      required: true
+      description: End date is optional
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createProgram'
+    createBusinessGoalRequest:
+      required: true
+      description: If start/end date is not included, start/end date will be same as Program. If target is included, AI recommendation will be impacted.
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createBusinessGoal'
+    createPlanRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createPlan'
+    createPlanGoalRequest:
+      required: true
+      description: If start/end date is not included, start/end date will be same as Plan
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createPlanGoal'
+    createBusinessGoalTemplateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createBusinessGoalTemplate'
+    createPlanGoalTemplateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/createPlanGoalTemplate'
+  responses:
+    getProgramResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/program'
+    getAllProgramsOfClientResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/program'
+    getBusinessGoalResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/businessGoal'
+    getAllBusinessGoalsOfProgramResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/businessGoal'
+    getPlanResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/plan'
+    getAllPlansOfProgramResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/plan'
+    getPlanGoalResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/planGoal'
+    getAllPlanGoalsOfPlanResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/plan' 
+    getBusinessGoalTemplateResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/businessGoalTemplate'
+    getAllBusinessGoalTemplatesResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/businessGoalTemplate'
+    getPlanGoalTemplateResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/planGoalTemplate'
+    getAllPlanGoalTemplatesResponse:
+      description: Ok - successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/planGoalTemplate'
+    4XX:
+      description: 4XX - request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetailResponse'
+          examples:
+            '400':
+              $ref: '#/components/examples/ProblemDetail_BadRequest'
+            '401':
+              $ref: '#/components/examples/ProblemDetail_Unauthorized'
+            '403':
+              $ref: '#/components/examples/ProblemDetail_Forbidden'
+            '404':
+              $ref: '#/components/examples/ProblemDetail_NotFound'
+    5XX:
+      description: 5XX - service error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetailResponse'
+          examples:
+            '500':
+              $ref: '#/components/examples/ProblemDetail_InternalServerError'
+            '503':
+              $ref: '#/components/examples/ProblemDetail_ServiceUnavailable'
+  examples:
+    ProblemDetail_BadRequest:
+      value:
+        title: Missing request parameter
+        status: '400'
+        detail: The request is missing an expected query or path parameter.
+        errors:
+          - detail: The query parameter {queryParameterName} is required.
+        parameter: queryParameterName
+        code: 400-03
+    ProblemDetail_Unauthorized:
+      value:
+        title: Unauthorized
+        status: '401'
+        detail: The request is not authorized to access this resource.
+    ProblemDetail_Forbidden:
+      value:
+        title: Forbidden
+        status: '403'
+        detail: The request credentials do not have permissions to access this resource.
+    ProblemDetail_NotFound:
+      value:
+        title: Not Found
+        status: '404'
+        detail: The requested resource could not be found.
+    ProblemDetail_InternalServerError:
+      value:
+        title: Internal server error
+        status: '500'
+        detail: An unexpected error occurred.
+    ProblemDetail_ServiceUnavailable:
+      value:
+        title: Service Unavailable
+        status: '503'
+        detail: The server was unable to complete your request. Please try again later.
+  schemas:
+    # Program
+    createProgram:
+      type: object
+      required:
+        - name
+        - description
+        - start
+      properties:
+        name:
+          type: string
+          example: "Preventative Care Program"
+        description:
+          type: string
+          example: "Program to improve member's usage of preventative care"
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: Start Date in MM-DD-YYYY format.
+          example: '12-31-2025'
+    program:
+      type: object
+      required:
+        - programId
+        - clientId
+        - name
+        - desc
+        - start
+        - status
+      properties:
+        programId:
+          type: string
+          description: Unique id of Program
+          example: 'program112234'
+        clientId:
+          type: string
+        name:
+          type: string
+          example: "Preventative Care Program"
+        desc:
+          type: string
+          description: "Program to improve member's usage of preventative care"
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        status:
+          $ref: '#/components/schemas/statusEnum'
+        businessGoals:
+          type: array
+          items:
+            $ref: '#/components/schemas/businessGoal'
+        businessGoalPriority:
+          type: array
+          items:
+            type: string
+          description: Sorted array of BusinessGoalIds by priority - for AI use
+          example: ['MGCompletion', 'PCCostSaving','CPCompletion']
+    # BusinessGoal
+    createBusinessGoal:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: Start Date in MM-DD-YYYY format.
+          example: '12-31-2025'
+        targetValue:
+          type: number
+          description: XXX.XX Format for Percentage Target, XXXXXXX Format for Cost Saving Target
+          example: 65
+        targetType:
+          type: string
+          enum:
+            - 'Percentage'
+            - 'Currency'
+          description: Target Unit Of Measure
+          example: 'Percentage'
+    businessGoal:
+      type: object
+      required:
+        - businessGoalId
+        - businessGoalTemplateId
+        - name
+        - desc
+        - type
+        - category
+        - kpiId
+        - start
+        - end
+        - status
+      properties:
+        businessGoalId:
+          type: string
+          description: Unique id of BusinessGoal
+          example: 'businessGoal112234'
+        businessGoalTemplateId:
+          type: string
+          description: Copied from BusinessGoalTemplate
+          example: 'MGCompletion'
+        name:
+          type: string
+          description: Name of BusinessGoalTemplate
+          example: 'Mammogram Completion'
+        desc:
+          type: string
+          description: Description of BusinessGoalTemplate
+          example: 'Track member completion of mammogram cancer screening'
+        type:
+          type: string
+          description: Type of BusinessGoalTemplate
+          example: 'Completion'
+        category:
+          $ref: '#/components/schemas/businessGoalCategoryEnum'
+        kpiId:
+          type: string
+          description: KPIs associated with BusinessGoalTemplate
+          example: 'MGCompletion'
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        status:
+          $ref: '#/components/schemas/statusEnum'
+        target:
+          type: object
+          properties:
+            businessGoalTarget:
+              $ref: '#/components/schemas/BusinessGoalTarget'
+          description: Target for BusinessGoal
+          example: { target: 65, unitOfMeasure: { type: 'Percentage' } }
+        aiDescription:
+          type: string
+          description: AI generated description of BusinessGoalTemplate
+          example: 'This BusinessGoalTemplate is designed to incentivize members to get a mammogram cancer screening. Blah blah blah'
+    BusinessGoalTarget:
+      type: object
+      properties:
+        target:
+          type: number
+          description: XXX.XX Format for Percentage Target, XXXXXXX Format for Cost Saving Target
+          example: 65
+        unitOfMeasure:
+          type: object
+          properties:
+            unitOfMeasure:
+              $ref: '#/components/schemas/unitOfMeasure'
+          description: Unit of Measure
+          example: { type: 'Percentage' }
+    unitOfMeasure:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - 'Percentage'
+            - 'Currency'
+    # Plan
+    createPlan:
+      type: object
+      required:
+        - name
+        - description
+        - start
+        - end
+        - budget
+        - maxMemberPayout
+      properties:
+        name:
+          type: string
+          example: 'Preventative Care 2025'
+        description:
+          type: string
+          example: 'Incentivize preventative care activities for 2025'
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        budget:
+          type: number
+          description: XXXXXXX Format for Budget
+          example: 650000
+        maxMemberPayout:
+          type: number
+          description: XXXXX Format for Max Member Payout
+          example: 200
+    plan:
+      type: object
+      required:
+        - planId
+        - clientId
+        - programId
+        - name
+        - desc
+        - start
+        - end
+        - status
+        - budget
+        - maxMemberPayout
+      properties:
+        planId:
+          type: string
+          description: Unique id of Plan
+          example: 'plan112234'
+        clientId:
+          type: string
+          description: Id of Client to which Plan belongs
+          example: 'EXMPLCompanyUSA'
+        programId:
+          type: string
+          description: Id of Program to which Plan belongs
+          example: 'program112234'
+        name:
+          type: string
+          description: Name of Plan
+          example: 'Preventative Care 2025'
+        desc:
+          type: string
+          description: Description of Plan
+          example: 'Incentivize preventative care activities for 2025'
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        status:
+          $ref: '#/components/schemas/statusEnum'
+        budget:
+          type: number
+          description: Budget for Plan
+          example: 650000
+        maxMemberPayout:
+          type: number
+          description: Max payout per Member
+          example: 200
+        goals:
+          type: array
+          items:
+            $ref: '#/components/schemas/planGoal'
+    # Plan Goal
+    createPlanGoal:
+      type: object
+      required:
+        - incentiveAmount
+        - incentiveType
+      properties:
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        incentiveAmount:
+          type: number
+          description: XXXXX Format for Incentive Amount
+          example: 120
+        incentiveType:
+          enum: 
+            - 'Cash'
+            - 'HSA'
+            - 'FSA'
+            - 'Motivosity'
+          type: string
+          description: Reward payment type for incentive
+          example: 'Cash'
+    planGoal:
+      type: object
+      required:
+        - planGoalId
+        - planGoalTemplateId
+        - name
+        - desc
+        - category
+        - activityType
+        - rule
+        - ruleTarget
+        - kpiIds
+        - partnerIds
+        - start
+        - end
+        - status
+        - incentive
+      properties:
+        planGoalId:
+          type: string
+          description: Unique id of PlanGoal
+          example: 'plangoal112234'
+        planGoalTemplateId:
+          type: string
+          description: Copied from PlanGoalTemplate
+          example: 'mammogramscreening1'
+        name:
+          type: string
+          description: Name of PlanGoal
+          example: 'Mammogram'
+        desc:
+          type: string
+          description: Description of PlanGoal
+          example: 'Incentivize members to get a mammogram cancer screening'
+        category:
+          $ref: '#/components/schemas/planGoalCategoryEnum'
+        activityType:
+          $ref: '#/components/schemas/activityTypeEnum'
+        rule:
+          type: string
+          description: Json Rules Engine String to Process Member Activity
+          example: '"{\"member_id\": \"ABC123\",\"cpt\":\"1234\"}"'
+        ruleTarget:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Target amount for Rule
+          example: 100
+        kpiIds:
+          type: array
+          items:
+            type: string
+          description: KPIs associated with PlanGoal
+          example: ['MGCompletion', 'PCCostSaving']
+        partnerIds:
+          type: array
+          items:
+            type: string
+          description: Partners associated with PlanGoal
+          example: ['HQYClaims', 'Cigna']
+        start:
+          type: string
+          description: Start Date in YYYY-MM-DD format
+          example: '2025-01-01'
+        end:
+          type: string
+          description: End Date in YYYY-MM-DD format.
+          example: '2025-12-31'
+        status:
+          $ref: '#/components/schemas/statusEnum'
+        incentive:
+          $ref: '#/components/schemas/incentive'
+        eligibilityRule:
+          type: string
+          description: Json Rules Engine String to Process Member Eligibility
+          example: "{\"member_id\": \"ABC123\",\"age\":\"45\"}"
+    incentive:
+      type: object
+      required:
+        - amount
+        - type
+      properties:
+        amount:
+          type: number
+          description: Incentive Amount
+          example: 120
+        type:
+          type: string
+          enum:
+            - 'Cash'
+            - 'HSA'
+            - 'FSA'
+            - 'Motivosity'
+          description: Incentive Type
+          example: 'Cash'
+    # Templates
+    createBusinessGoalTemplate:
+      type: object
+      required:
+        - businessGoalTemplateId
+        - name
+        - desc
+        - type
+        - category
+        - availablePlanGoalTemplateIds
+        - availablePartnerIds
+      properties:
+        businessGoalTemplateId:
+          type: string
+          description: Unique Id of BusinessGoalTemplate
+          example: 'MGCompletion'
+        type:
+          $ref: '#/components/schemas/businessGoalTypeEnum'
+        category:
+          $ref: '#/components/schemas/businessGoalCategoryEnum'
+        name:
+          type: string
+          description: Name of BusinessGoalTemplate
+          example: 'Mammogram Completion'
+        desc:
+          type: string
+          description: Description of BusinessGoalTemplate
+          example: 'Track member completion of mammogram cancer screening'
+        kpiId:
+          type: string
+          description: KPIs associated with BusinessGoalTemplate
+          example: 'MGCompletion'
+        availablePlanGoalTemplateIds:
+          type: array
+          items:
+            type: string
+          description: PlanGoalTemplates associated with BusinessGoalTemplate
+          example: ['mammogramscreening1']
+        availablePartnerIds:
+          type: array
+          items:
+            type: string
+          description: Partners associated with BusinessGoalTemplate
+          example: ['HQYClaims', 'Cigna']
+        aiDescription:
+          type: string
+          description: AI generated description of BusinessGoalTemplate
+          example: 'This BusinessGoalTemplate is designed to incentivize members to get a mammogram cancer screening. Blah blah blah'
+    businessGoalTemplate:
+      type: object
+      required:
+        - businessGoalTemplateId
+        - version
+        - author
+        - lastEditiedBy
+        - name
+        - desc
+        - type
+        - category
+        - kpiId
+        - availablePlanGoalTemplateIds
+        - availablePartnerIds
+      properties:
+        businessGoalTemplateId:
+          type: string
+          description: Unique Id of BusinessGoalTemplate
+          example: 'MGCompletion'
+        version:
+          type: string
+          description: Version of BusinessGoalTemplate
+          example: '1.0'
+        author:
+          type: string
+          description: Author of BusinessGoalTemplate
+          example: 'johnsmith@healthequity.com'
+        lastEditiedBy:
+          type: string
+          description: Last edited by
+          example: 'janesmith@healthequity.com'
+        name:
+          type: string
+          description: Name of BusinessGoalTemplate
+          example: 'Mammogram Completion'
+        desc:
+          type: string
+          description: Description of BusinessGoalTemplate
+          example: 'Track member completion of mammogram cancer screening'
+        type:
+          $ref: '#/components/schemas/businessGoalTypeEnum'
+        category:
+          $ref: '#/components/schemas/businessGoalCategoryEnum'
+        kpiId:
+          type: string
+          description: KPIs associated with BusinessGoalTemplate
+          example: 'MGCompletion'
+        availablePlanGoalTemplateIds:
+          type: array
+          items:
+            type: string
+          description: PlanGoalTemplates associated with BusinessGoalTemplate
+          example: ['mammogramscreening1']
+        availablePartnerIds:
+          type: array
+          items:
+            type: string
+          description: Partners associated with BusinessGoalTemplate
+          example: ['HQYClaims', 'Cigna']
+        aiDescription:
+          type: string
+          description: AI generated description of BusinessGoalTemplate
+          example: 'This BusinessGoalTemplate is designed to incentivize members to get a mammogram cancer screening. Blah blah blah'
+    createPlanGoalTemplate:
+      type: object
+      required:
+        - planGoalTemplateId
+        - name
+        - desc
+        - category
+        - activityType
+        - rule
+        - ruleTarget
+        - businessGoalCategory
+        - kpiIds
+        - partnerIds
+      properties:
+        planGoalTemplateId:
+          type: string
+          description: Unique id of PlanGoalTemplate
+          example: 'mammogramscreening1'
+        name:
+          type: string
+          description: Name of PlanGoalTemplate
+          example: 'Mammogram'
+        desc:
+          type: string
+          description: Description of PlanGoalTemplate
+          example: 'Incentivize members to get a mammogram cancer screening'
+        category:
+          $ref: '#/components/schemas/planGoalCategoryEnum'
+        activityType:
+          $ref: '#/components/schemas/activityTypeEnum'
+        rule:
+          type: string
+          description: Json Rules Engine String to Process Member Activity
+          example: '"{\"member_id\": \"ABC123\",\"cpt\":\"1234\"}"'
+        ruleTarget:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Target amount for Rule
+          example: 100
+        eligibilityRule:
+          type: string
+          description: Json Rules Engine String to Process Member Eligibility
+          example: "{\"member_id\": \"ABC123\",\"age\":\"45\"}"
+        businessGoalCategory:
+          $ref: '#/components/schemas/businessGoalCategoryEnum'
+        kpiIds:
+          type: array
+          items:
+            type: string
+          description: KPIs associated with PlanGoalTemplate
+          example: ['MGCompletion', 'PCCostSaving']
+        partnerIds:
+          type: array
+          items:
+            type: string
+          description: Partners associated with PlanGoalTemplate
+          example: ['HQYClaims', 'Cigna']
+    planGoalTemplate:
+      type: object
+      required:
+        - planGoalTemplateId
+        - version
+        - author
+        - lastEditiedBy
+        - name
+        - desc
+        - category
+        - activityType
+        - rule
+        - ruleTarget
+        - businessGoalCategory
+        - kpiIds
+        - partnerIds
+      properties:
+        planGoalTemplateId:
+          type: string
+          description: Unique id of PlanGoalTemplate
+          example: 'mammogramscreening1'
+        version:
+          type: string
+          description: Version of BusinessGoalTemplate
+          example: '1.0'
+        author:
+          type: string
+          description: Author of BusinessGoalTemplate
+          example: 'johnsmith@healthequity.com'
+        lastEditiedBy:
+          type: string
+          description: Last edited by
+          example: 'janesmith@healthequity.com'
+        name:
+          type: string
+          description: Name of BusinessGoalTemplate
+          example: 'Mammogram Completion'
+        desc:
+          type: string
+          description: Description of BusinessGoalTemplate
+          example: 'Track member completion of mammogram cancer screening'
+        category:
+          $ref: '#/components/schemas/planGoalCategoryEnum'
+        activityType:
+          $ref: '#/components/schemas/activityTypeEnum'
+        rule:
+          type: string
+          description: Json Rules Engine String to Process Member Activity
+          example: '"{\"member_id\": \"ABC123\",\"cpt\":\"1234\"}"'
+        ruleTarget:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Target amount for Rule
+          example: 100
+        businessGoalCategoryEmun:
+          $ref: '#/components/schemas/businessGoalCategoryEnum'
+        kpiId:
+          type: string
+          description: KPIs associated with BusinessGoalTemplate
+          example: 'MGCompletion'
+        availablePartnerIds:
+          type: array
+          items:
+            type: string
+          description: Partners associated with BusinessGoalTemplate
+          example: ['HQYClaims', 'Cigna']
+    # Enums
+    statusEnum:
+      type: string
+      enum:
+        - 'Active'
+        - 'Inactive'
+        - 'Archived'
+      example: 'Active'
+    activityTypeEnum:
+      type: string
+      enum:
+        - 'Vaccination'
+        - 'Mammogram'
+        - 'Colonoscopy'
+        - 'AnnualWellnessScreening'
+        - 'PreDiabetesScreening'
+      description: Activity type of PlanGoalTemplate
+      example: 'Mammogram'
+    businessGoalCategoryEnum:
+      type: string
+      enum:
+        - 'Preventative Care'
+        - 'Condition Management'
+        - 'Sites of Care'
+      description: Business Goal Category of PlanGoalTemplate
+      example: 'Preventative Care'
+    businessGoalTypeEnum:
+      type: string
+      enum:
+        - 'Completion'
+        - 'CostSaving'
+      description: Business Goal Type of PlanGoalTemplate
+      example: 'Completion'
+    planGoalCategoryEnum:
+      type: string
+      enum:
+        - 'Preventive'
+        - 'Financial'
+        - 'Nutrition'
+        - 'Movement'
+        - 'Wellness'
+        - 'Mental'
+      example: 'Preventive'
+    # Other
+    ProblemDetailResponse:
+      type: object
+      description: An object providing details on a problem.
+      properties:
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: string
+          description: The HTTP status code generated by the origin server.
+          format: int32
+          minimum: 100
+          maximum: 599
+        detail:
+          type: string
+          description: A human-readable explanation specific to this problem.
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem.
+        errors:
+          type: array
+          description: An array of error details that accompany an instance of a problem detail.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: An object providing explicit details on a problem.
+      properties:
+        detail:
+          type: string
+          description: A granular explanation of the specific error related to a body property, query parameter, path parameters, and/or header.
+        pointer:
+          type: boolean
+          description: A JSON Pointer to a specific request body property that is the source of error.
+        parameter:
+          type: string
+          description: The name of the query or path parameter that is the source of error.
+        header:
+          type: string
+          description: The name of the header that is the source of error.
+        code:
+          type: string
+          description: A string containing additional provider specific codes to identify the error context.
