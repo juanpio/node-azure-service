@@ -9,7 +9,7 @@ services:
     environment:
       DB_ATLAS_URI: ${DB_ATLAS_URI}
     networks:
-      - iep-emulator
+      - iep_emulator
     depends_on:
       - mongodb
   mongodb:
@@ -24,7 +24,7 @@ services:
     #   - data:/data/db
     #   - config:/data/configdb
     networks:
-      - iep-emulator
+      - iep_emulator
   mongo-express:
     image: mongo-express
     ports:
@@ -36,11 +36,12 @@ services:
     depends_on:
       - "mongodb"
     networks:
-      - iep-emulator
+      - iep_emulator
 
 volumes:
   data:
   config:
 
 networks:
-  iep-emulator:
+  iep_emulator:
+    driver: bridge

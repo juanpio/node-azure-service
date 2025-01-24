@@ -9,6 +9,9 @@ export ME_CONFIG_MONGODB_SERVER="mongodb"
 
 env
 
+#Create a docker network
+docker network create iep_emulator
+
 #Run docker compose file detached mode
 docker compose -p node-mongo-api-compouse -f "node-api-mongo/docker-compose.yml" up -d --build
 
