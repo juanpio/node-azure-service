@@ -25,9 +25,18 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3000/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzM3NjA5MTEzLCJleHAiOjE3Mzc2MTI3MTN9.PvJSPOTCfYaq7xq1IrQyVPEN9ZrGCYKNwdcGDwk47yg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzM3NzU4OTQ2LCJleHAiOjE3Mzc3NjI1NDZ9.aq4z_mVo_BIMR657U3CWRI8EOw3uK9ZwB0yaAbhdZLw
 Content-Type: application/json
 
+[
+  {"partnerId": "Apple Health Kit", "memberActivity": 23424.0, "activityDescription": "simple walking activity", "activityDate": "01/10/2025", "activityType": "walking", "memberId": "1000", "activityCode": "STEPS"}, 
+  {"memberId": "1000", "activityType": "walking", "activityDescription": "simple walking activity", "partnerId": "Apple Health Kit", "activityCode": "STEPS", "activityDate": "01/14/2025", "memberActivity": 122.0}, 
+  {"activityDescription": "simple walking activity", "memberActivity": 11.0, "activityDate": "01/02/2025", "activityCode": "STEPS", "memberId": "1000", "activityType": "walking", "partnerId": "Apple Health Kit"},
+    {"partnerId": "Apple Health Kit", "memberActivity": 111.0, "activityDate": "01/06/2025", "activityType": "walking", "memberId": "1000", "activityCode": "STEPS", "activityDescription": "simple walking activity"} 
+]
+
+
+###
 {
     "memberId": "Member Id",
     "partnerId": "Apple Health Kit",
