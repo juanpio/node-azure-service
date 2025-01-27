@@ -1,5 +1,16 @@
 name: microsoft-azure-servicebus-emulator
 services:
+  initializer:
+    container_name: "initializer"
+    build:
+      context: ./initializer
+      dockerfile: Dockerfile
+    networks:
+      - sb-emulator
+    env_file:
+      - .env
+    depends_on:
+      - eventhubs-emulator
   node-process:
     container_name: "node-process"
     build:
@@ -27,6 +38,28 @@ services:
       - servicebus-emulator
       - eventhubs-emulator
       - mongodb
+  clams-ingetions:
+    container_name: "clams-ingetions"
+    build:
+      context: ./iep-claims-ingestion-svc
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    environment:
+      BLOB_SERVER: azurite
+      METADATA_SERVER: azurite
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      AZURE_SB_CONN_STR: "Endpoint=sb://servicebus-emulator;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;"
+      AZURE_SB_ACTIVITY_QUEUE: "activity-received"
+    depends_on:
+      - servicebus-emulator
+      - eventhubs-emulator
+    networks:
+      sb-emulator:
+        aliases:
+          - "clams-ingetions"
   servicebus-emulator:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
@@ -35,9 +68,11 @@ services:
       - "${CONFIG_PATH_SB}:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
+    env_file:
+      - .env
     environment:
       SQL_SERVER: sqledge
-      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"  # Password should be same as what is set for SQL Edge  
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}" # Password should be same as what is set for SQL Edge
       ACCEPT_EULA: ${ACCEPT_EULA}
     depends_on:
       - sqledge
@@ -52,9 +87,25 @@ services:
       sb-emulator:
         aliases:
           - "sqledge"
+    env_file:
+      - .env
     environment:
       ACCEPT_EULA: ${ACCEPT_EULA}
-      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}" # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16 
+      MSSQL_SA_PASSWORD: ${SQL_PASSWORD}
+    volumes:
+      - /tmp/sqledge:/var/opt/mssql
+  # sqledge:
+  #   container_name: "sqledge"
+  #   image: "mcr.microsoft.com/azure-sql-edge:latest"
+  #   networks:
+  #     sb-emulator:
+  #       aliases:
+  #         - "sqledge"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     ACCEPT_EULA: ${ACCEPT_EULA}
+  #     MSSQL_SA_PASSWORD: ${SQL_PASSWORD} # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16
   eventhubs-emulator:
     container_name: "eventhubs-emulator"
     image: "mcr.microsoft.com/azure-messaging/eventhubs-emulator:latest"
@@ -64,6 +115,8 @@ services:
     ports:
       - "5673:5673"
       - "9092:9092"
+    env_file:
+      - .env
     environment:
       BLOB_SERVER: azurite
       METADATA_SERVER: azurite
