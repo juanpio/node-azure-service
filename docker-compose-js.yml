@@ -1,32 +1,5 @@
 name: microsoft-azure-servicebus-emulator
 services:
-  # netcore-app-servicebus:
-  #   container_name: "netcore-app-servicebus"
-  #   build:
-  #     context: ./samples/service-bus-samples/dotnet
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - sb-emulator
-  #   depends_on:
-  #     - servicebus-emulator
-  # node-app-servicebus:
-  #   container_name: "node-app-servicebus"
-  #   build:
-  #     context: ./samples/service-bus-samples/nodejs
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - sb-emulator
-  #   depends_on:
-  #     - servicebus-emulator
-  # netcore-app-eventhubs:
-    # container_name: "netcore-app-eventhubs"
-    # build:
-    #   context: ./samples/event-hubs-samples/dotnet
-    #   dockerfile: Dockerfile
-    # networks:
-    #   - sb-emulator
-    # depends_on:
-    #   - eventhubs-emulator
   node-process:
     container_name: "node-process"
     build:
@@ -34,11 +7,26 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      - DB_ATLAS_URI: mongodb://development:@Sqledge123$2025@localhost:27017/?directConnection=true
     networks:
       - sb-emulator
     depends_on:
       - servicebus-emulator
       - eventhubs-emulator
+  node-api-mongo:
+    container_name: "node-api-mongo"
+    build:
+      context: ./node-api-mongo
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    networks:
+      - sb-emulator
+    depends_on:
+      - servicebus-emulator
+      - eventhubs-emulator
+      - mongodb
   servicebus-emulator:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
@@ -97,7 +85,35 @@ services:
       sb-emulator:
         aliases:
           - "azurite"
-
+ 
+#docker run -e MONGODB_INITDB_ROOT_USERNAME=user -e MONGODB_INITDB_ROOT_PASSWORD=pass -p 27017:27017 mongodb/mongodb-atlas-local
+  atlas:
+    image: mongodb/mongodb-atlas-local:latest
+    ports:
+        - 27017:27017
+    environment:
+        MONGODB_INITDB_ROOT_USERNAME: development
+        MONGODB_INITDB_ROOT_PASSWORD: "@Sqledge123$2025"
+        DB_ATLAS_URI: mongodb://development:@Sqledge123$2025@localhost:27017/?directConnection=true
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      sb-emulator:
+        aliases:
+          - "atlas"
+  
+  mongodb:
+    image: mongodb/mongodb-atlas-local
+    environment:
+        MONGODB_INITDB_ROOT_USERNAME: development
+        MONGODB_INITDB_ROOT_PASSWORD: "@Sqledge123$2025"
+    ports:
+      - 27018:27017
+    networks:
+      sb-emulator:
+        aliases:
+          - "mongodb"
+volumes:
+  mongo_data:
 networks:
   sb-emulator:
-
