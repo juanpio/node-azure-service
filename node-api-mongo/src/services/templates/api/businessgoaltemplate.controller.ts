@@ -15,7 +15,7 @@ import { BusinessGoalTemplateService } from "./businessgoaltemplate.service";
 import { BusinessGoalTemplateApiMapper } from "./mappers/businessgoaltemplate-api.mapper";
 import { BusinessGoalTemplateEntity } from "../domain/entities/businessgoaltemplate.entity";
 import { ViewBusinessGoalTemplateDto } from "./dtos/view-businessgoaltemplate.dto";
-import { CreateBusinessGoalTemplateDto } from "./dtos/create-businessgoaltemplate.dto";
+import { CreateBusinessGoalTemplateDto } from "./dtos/create-businessGoaltemplate.dto";
 
 @Controller({ path: "templates/businessgoals" })
 export class BusinessGoalTemplateController {

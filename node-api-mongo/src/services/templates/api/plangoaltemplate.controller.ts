@@ -14,7 +14,7 @@ import { Response } from "express";
 import { PlanGoalTemplateEntity } from "../domain/entities/plangoaltemplate.entity";
 import { CreatePlanGoalTemplateDto } from "./dtos/create-plangoaltemplate.dto";
 import { ViewPlanGoalTemplateDto } from "./dtos/view-plangoaltemplate.dto";
-import { PlanGoalTemplateApiMapper } from "./mappers/plangoaltemplate-api.mapper";
+import { PlanGoalTemplateApiMapper } from "./mappers/planGoaltemplate-api.mapper";
 import { PlanGoalTemplateService } from "./plangoaltemplate.service";
 
 @Controller({ path: "templates/plangoals" })
